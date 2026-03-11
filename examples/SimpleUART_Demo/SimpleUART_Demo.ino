@@ -1,4 +1,4 @@
-#include "SimpleUART.h"
+#include <SimpleUART.h>
 #include <string.h>
 
 // Initialize with 16 bytes buffer
@@ -32,4 +32,5 @@ void loop() {
 
         myUART.clear_line();
     }
+
 }
