@@ -4,6 +4,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdbool.h>
+#include <stdlib.h> // itoaを使用するために追加
 
 /**
  * @brief SimpleUART Library for ATtiny 0-series
@@ -26,15 +27,50 @@ public:
         sei();
     }
 
+    // --- 基本の1文字送信 ---
     void send_char(char c) {
         while (!(USART0.STATUS & USART_DREIF_bm));
         USART0.TXDATAL = c;
     }
 
+    // --- 既存のGitHub互換用関数 ---
     void send_string(const char* str) {
-        while (*str) send_char(*str++);
+        this->print(str); // printを呼び出すようにして共通化
     }
 
+    // --- 新機能：標準ライブラリ風 print 関数 ---
+    void print(char c) {
+        this->send_char(c);
+    }
+
+    void print(const char* s) {
+        while (*s) {
+            this->send_char(*s++);
+        }
+    }
+
+    void print(int n) {
+        char buf[7]; // -32768〜32767
+        itoa(n, buf, 10);
+        this->print(buf);
+    }
+
+    // --- 新機能：標準ライブラリ風 println 関数 ---
+    void println(const char* s) {
+        this->print(s);
+        this->print("\r\n");
+    }
+
+    void println(int n) {
+        this->print(n);
+        this->print("\r\n");
+    }
+
+    void println() {
+        this->print("\r\n");
+    }
+
+    // --- 受信・割り込み関連（既存通り） ---
     void handle_interrupt() {
         char c = USART0.RXDATAL;
         send_char(c); // Echo back
