@@ -1,4 +1,4 @@
-# SimpleUART for ATtiny 0-series (202/402)
+# SimpleUART for ATtiny 0-series (202/402/1604)
 
 [English]
 A lightweight, header-only UART library designed for ATtiny 0-series microcontrollers. 
