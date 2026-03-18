@@ -39,3 +39,29 @@ void loop() {
         myUART.clear_line();
     }
 }
+最新バージョンでは、Arduino標準ライブラリに近い print / println 形式が使用可能です。
+
+```cpp
+#include "SimpleUART.h"
+
+// 32バイトのバッファを指定 / Define 32-byte buffer
+SimpleUART<32> myUART;
+
+// 受信割り込みハンドラ / Interrupt handler
+ISR(USART0_RXC_vect) {
+myUART.handle_interrupt();
+}
+
+void setup() {
+myUART.init(115200);
+myUART.println("SimpleUART Ready!"); // 改行付き送信
+}
+
+void loop() {
+if (myUART.is_line_ready()) {
+myUART.print("Received: ");      // 文字列送信
+myUART.println(myUART.get_line());
+myUART.clear_line();
+}
+}
+```
