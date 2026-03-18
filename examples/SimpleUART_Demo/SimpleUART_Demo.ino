@@ -31,6 +31,7 @@ void loop() {
         }
 
         myUART.clear_line();
+        myUART.println("Ready for next message.");
     }
 
 }
